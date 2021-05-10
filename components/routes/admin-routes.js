@@ -7,6 +7,10 @@ module.exports = () => {
     app.use(bodyParser.json());
     app.use(helmet());
 
+    app.get('/hello-world', (req, res) => {
+      res.send('hello world');
+    });
+
     app.get('/__/manifest', (req, res) => res.json(manifest));
 
     return Promise.resolve();
