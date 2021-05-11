@@ -8,15 +8,29 @@ module.exports = {
   },
   routes: {
     admin: {
-      swaggerValidator: {
-        apiDocEndpoint: '/__/docs/api',
-        validateRequests: true,
-        validateResponses: true,
-        validationEndpoint: '/test',
-        format: 'yaml',
-        yaml: {
-          file: './docs/syncapi.yaml',
+      openAPIOptions: {
+        info: {
+          description: 'Documentation for Systemic example API',
+          title: 'Systemic KS API',
+          version: '1.0.0',
+          contact: {
+            name: 'GuideSmiths',
+            email: 'hello@guidesmiths.com',
+          },
         },
+        servers: [],
+        security: {
+          JWT: {
+            type: 'apiKey',
+            in: 'header',
+            name: 'Authorization',
+          },
+        },
+        baseDir: process.cwd(),
+        swaggerUIPath: '/docs/api',
+        filesPattern: [
+          './components/routes/**-routes.js',
+        ],
       },
     },
   },

@@ -4,13 +4,21 @@ const {
   handleHttpError,
   tagError,
 } = require('error-handler-module');
+const { validateRequest, validateResponse } = require('express-oas-validator');
 
 const badRequestError = errorFactory(CustomErrorTypes.BAD_REQUEST);
 const notFoundError = errorFactory(CustomErrorTypes.NOT_FOUND);
 
 module.exports = () => {
   const start = async ({ app, logger, slack }) => {
-    app.get('/me', (req, res, next) => {
+    /**
+     * GET /me
+     * @summary my data
+     * @tags API
+     * @param {number} age.query.required - age filter
+     * @return {MeResponse} 200 - basic response
+     */
+    app.get('/me', validateRequest(), (req, res, next) => {
       try {
         const me = {
           firstName: 'Kevin',
@@ -23,13 +31,21 @@ module.exports = () => {
         if (me.age < req.query.age) {
           throw notFoundError('I am not old');
         }
+        validateResponse(me);
         return res.json(me);
       } catch (err) {
         return next(tagError(err));
       }
     });
 
-    app.post('/message', async (req, res, next) => {
+    /**
+     * POST /message
+     * @summary send message to Slack channel
+     * @tags API
+     * @param {SlackRequest} request.body.required - songs info - application/json
+     * @return {SuccessResponse} 200 - basic response
+     */
+    app.post('/message', validateRequest(), async (req, res, next) => {
       try {
         await slack.send({
           text: req.body.message,
