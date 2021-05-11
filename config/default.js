@@ -3,6 +3,9 @@ module.exports = {
     host: '0.0.0.0',
     port: 4000,
   },
+  slack: {
+    webhookURL: process.env.SLACK_URL,
+  },
   routes: {
     admin: {
       swaggerValidator: {
