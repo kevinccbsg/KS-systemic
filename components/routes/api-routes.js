@@ -9,7 +9,7 @@ const badRequestError = errorFactory(CustomErrorTypes.BAD_REQUEST);
 const notFoundError = errorFactory(CustomErrorTypes.NOT_FOUND);
 
 module.exports = () => {
-  const start = async ({ app, logger }) => {
+  const start = async ({ app, logger, slack }) => {
     app.get('/me', (req, res, next) => {
       try {
         const me = {
@@ -24,6 +24,17 @@ module.exports = () => {
           throw notFoundError('I am not old');
         }
         return res.json(me);
+      } catch (err) {
+        return next(tagError(err));
+      }
+    });
+
+    app.post('/message', async (req, res, next) => {
+      try {
+        await slack.send({
+          text: req.body.message,
+        });
+        return res.json({ success: true });
       } catch (err) {
         return next(tagError(err));
       }
