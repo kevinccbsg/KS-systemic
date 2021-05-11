@@ -1,13 +1,18 @@
 const expect = require('expect.js');
 const supertest = require('supertest');
+const { assert } = require('sinon');
 const system = require('../system');
+const initSlack = require('./mocks/slackSystem');
 
 describe('API Tests', () => {
   let request;
-  const sys = system();
+  let slackSystem;
+  let sys = system();
+  sys = sys.set('slack', initSlack()).dependsOn();
 
   before(async () => {
-    const { app } = await sys.start();
+    const { app, slack } = await sys.start();
+    slackSystem = slack;
     request = supertest(app);
   });
 
@@ -31,4 +36,18 @@ describe('API Tests', () => {
     .then(response => {
       expect(response.body.message).to.eql('I am not old');
     }));
+
+  it('"/message" should return 200 (OK) and send a message', () => {
+    const expectedMessage = 'sending message';
+    return request
+      .post('/message')
+      .send({ message: expectedMessage })
+      .expect(200)
+      .then(response => {
+        expect(response.body.success).to.eql(true);
+        assert.calledWith(slackSystem.send, {
+          text: expectedMessage,
+        });
+      });
+  });
 });
