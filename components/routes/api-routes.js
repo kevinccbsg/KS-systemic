@@ -6,7 +6,6 @@ const {
 } = require('error-handler-module');
 const { validateRequest, validateResponse } = require('express-oas-validator');
 
-const badRequestError = errorFactory(CustomErrorTypes.BAD_REQUEST);
 const notFoundError = errorFactory(CustomErrorTypes.NOT_FOUND);
 
 module.exports = () => {
@@ -25,9 +24,6 @@ module.exports = () => {
           lastName: 'Martinez',
           age: 27,
         };
-        if (!req.query.age) {
-          throw badRequestError('age is required');
-        }
         if (me.age < req.query.age) {
           throw notFoundError('I am not old');
         }

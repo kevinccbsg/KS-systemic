@@ -26,7 +26,7 @@ describe('API Tests', () => {
     .get('/me')
     .expect(400)
     .then(response => {
-      expect(response.body.message).to.eql('age is required');
+      expect(response.body.message).to.eql('Required error: age query param is required.');
     }));
 
   it('"/me" should return 404 (NOT_FOUND)', () => request
@@ -50,4 +50,12 @@ describe('API Tests', () => {
         });
       });
   });
+
+  it('"/message" should return 400 (BAD_REQUEST) when we send an invalid response', () => request
+    .post('/message')
+    .send({ message: false })
+    .expect(400)
+    .then(response => {
+      expect(response.body.message).to.eql('Error in request: Schema SlackRequest/properties/message must be string. You provide "{"message":false}"');
+    }));
 });
