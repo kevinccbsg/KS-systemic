@@ -16,6 +16,10 @@ describe('API Tests', () => {
     request = supertest(app);
   });
 
+  afterEach(() => {
+    slackSystem.send.resetHistory();
+  });
+
   after(() => sys.stop());
 
   it('"/hello-world" should return 200 (OK)', () => request
@@ -58,4 +62,18 @@ describe('API Tests', () => {
     .then(response => {
       expect(response.body.message).to.eql('Error in request: Schema SlackRequest/properties/message must be string. You provide "{"message":false}"');
     }));
+
+  it('"/message" assert one time', () => {
+    const expectedMessage = 'sending message';
+    return request
+      .post('/message')
+      .send({ message: expectedMessage })
+      .expect(200)
+      .then(response => {
+        expect(response.body.success).to.eql(true);
+        assert.calledOnceWithExactly(slackSystem.send, {
+          text: expectedMessage,
+        });
+      });
+  });
 });
