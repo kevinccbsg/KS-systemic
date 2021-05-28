@@ -43,6 +43,7 @@
     "bunyan": "^1.8.12",
     "chalk": "^4.0.0",
     "confabulous": "^2.0.3",
+    "cross-env": "^7.0.3",
     "debug": "^4.1.1",
     "dotenv": "^9.0.2",
     "error-handler-module": "^1.0.5",
