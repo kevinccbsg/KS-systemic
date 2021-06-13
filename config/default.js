@@ -41,4 +41,7 @@ module.exports = {
     ],
     exclude: ['password', 'secret', 'token', 'request.headers.cookie', 'dependencies', 'devDependencies'],
   },
+  slack: {
+    webhookURL: process.env.SLACK_URL,
+  },
 };

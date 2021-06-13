@@ -1,11 +1,12 @@
 const expect = require('expect.js');
 const supertest = require('supertest');
 const system = require('../system');
+const initSlack = require('./mocks/slackSystem');
 
 describe('Service Tests', () => {
   let request;
-  const sys = system();
-
+  let sys = system();
+  sys = sys.set('slack', initSlack()).dependsOn();
   before(async () => {
     const { app } = await sys.start();
     request = supertest(app);

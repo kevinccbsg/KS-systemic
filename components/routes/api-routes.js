@@ -8,7 +8,7 @@ const {
 const badRequest = errorFactory(CustomErrorTypes.BAD_REQUEST);
 
 module.exports = () => {
-  const start = async ({ app, logger }) => {
+  const start = async ({ app, logger, slack }) => {
     app.get('/me', (req, res, next) => {
       try {
         const me = {
@@ -20,6 +20,17 @@ module.exports = () => {
         }
         logger.info('Hellooo');
         return res.json(me);
+      } catch (error) {
+        return next(tagError(error));
+      }
+    });
+
+    app.post('/message', async (req, res, next) => {
+      try {
+        await slack.send({
+          text: '@victor --',
+        });
+        return res.json({ success: true });
       } catch (error) {
         return next(tagError(error));
       }

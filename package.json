@@ -38,11 +38,13 @@
     "supertest": "^4.0.2"
   },
   "dependencies": {
+    "@slack/webhook": "^6.0.0",
     "body-parser": "^1.19.0",
     "bunyan": "^1.8.12",
     "chalk": "^4.0.0",
     "confabulous": "^2.0.3",
     "debug": "^4.1.1",
+    "dotenv": "^10.0.0",
     "error-handler-module": "^1.0.5",
     "helmet": "^4.1.1",
     "hogan.js": "^3.0.2",
